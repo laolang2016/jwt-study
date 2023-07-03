@@ -14,5 +14,9 @@ Content-Type: application/json
 
 
 ### 
-GET {{baseurl}}/admin/sysdict/info2 HTTP/1.1
+GET {{baseurl}}/admin/sysdict/info HTTP/1.1
 Authorization: {{authToken}}
+
+### 
+GET {{baseurl}}/admin/test/testAnonymousAccess HTTP/1.1
+
