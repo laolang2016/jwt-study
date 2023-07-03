@@ -2,6 +2,9 @@ package com.laolang.shop.modules.auth.domain;
 
 import lombok.Data;
 
+/**
+ * 用户信息
+ */
 @Data
 public class AuthUser {
 

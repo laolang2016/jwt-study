@@ -20,6 +20,9 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+/**
+ * jwt 拦截器
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component

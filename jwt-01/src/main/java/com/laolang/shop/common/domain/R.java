@@ -98,7 +98,7 @@ public class R<T> {
         return build(StatusCodeConst.FIXING.getCode(), false, StatusCodeConst.FIXING.getMsg(), null);
     }
 
-    public static <T> R<T> notFount() {
+    public static <T> R<T> notFound() {
         return build(StatusCodeConst.NOT_FOUND.getCode(), false, StatusCodeConst.NOT_FOUND.getMsg(), null);
     }
 

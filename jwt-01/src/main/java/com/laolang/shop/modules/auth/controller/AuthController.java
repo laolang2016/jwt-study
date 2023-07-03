@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private final AuthLogic authLogic;
 
+    /**
+     * 登录接口
+     */
     @PostMapping("login")
     public R<LoginRsp> login(@RequestBody LoginUser loginUser) {
         return R.ok(authLogic.login(loginUser));

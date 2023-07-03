@@ -16,12 +16,18 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * token 工具服务
+ */
 @RequiredArgsConstructor
 @Service
 public class TokenService {
 
     private final TokenProperties tokenProperties;
 
+    /**
+     * 生成 token
+     */
     public String buildToken(AuthUser authUser) {
         authUser.setUuid(IdUtil.fastSimpleUUID());
         Map<String, Object> claims = Maps.newHashMap();
@@ -36,6 +42,9 @@ public class TokenService {
                 .signWith(SignatureAlgorithm.HS512, tokenProperties.getSecret()).compact();
     }
 
+    /**
+     * 校验 token
+     */
     public AuthUser verify(String token) {
         try {
             Claims claims = Jwts.parser().setSigningKey(tokenProperties.getSecret()).parseClaimsJws(token).getBody();
@@ -49,6 +58,4 @@ public class TokenService {
             throw new AuthBusinessException(AuthBizCode.error_token);
         }
     }
-
-
 }

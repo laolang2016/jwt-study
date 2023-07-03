@@ -2,12 +2,14 @@ package com.laolang.shop.config.web;
 
 import com.laolang.shop.common.domain.R;
 import com.laolang.shop.common.exception.BusinessException;
+import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 @Slf4j
 @RestControllerAdvice
@@ -22,6 +24,16 @@ public class GlobalExceptionHandler {
         r.setPropFromBusinessException(e);
         log.error("请求出错:{}", r.getMsg());
         return ResponseEntity.status(HttpStatus.OK).body(r);
+    }
+
+    /**
+     * 拦截 404
+     */
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<R<Void>> notFoundHandler(NoHandlerFoundException e, HttpServletRequest request) {
+        R<Void> r = R.notFound();
+        log.warn("请求地址不存在:{}", request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(r);
     }
 
     /**

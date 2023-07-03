@@ -22,8 +22,11 @@ public class SysDictController {
     public R<Map<String, Object>> info() {
         log.info("admin sysdict info");
         Map<String, Object> body = Maps.newHashMap();
+
+        // 获取登录用户信息
         body.put("userId", authBusiness.getUserId());
         body.put("username", authBusiness.getAuthUser().getUsername());
+
         return R.ok(body);
     }
 }

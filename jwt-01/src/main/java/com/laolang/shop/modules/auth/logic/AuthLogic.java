@@ -41,7 +41,10 @@ public class AuthLogic {
         }
         AuthUser authUser = new AuthUser();
         authUser.setUsername(loginUser.getUsername());
+
+        // 生成 token
         String token = tokenService.buildToken(authUser);
+
         log.info("token:{}", token);
         LoginRsp rsp = new LoginRsp();
         rsp.setToken(token);

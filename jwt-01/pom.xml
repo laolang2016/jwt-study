@@ -131,7 +131,7 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-            <!-- 必须添加, 否则无法 jar 包无法运行 -->
+            <!-- 必须添加, 否则 `java jar` 无法运行 -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

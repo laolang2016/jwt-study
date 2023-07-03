@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * 主要用来获取拦截器放在 request 中的用户信息
+ */
 @RequiredArgsConstructor
 @Service
 public class AuthBusiness {
