@@ -1,0 +1,19 @@
+server:
+  port: 8091
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: jx-boot
+
+
+logging:
+  level:
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    com.laolang.ssa.mall.khlmall: info
+  config: classpath:logback-spring.xml
+  file:
+    path: ../logs/jwt-01
+
+
