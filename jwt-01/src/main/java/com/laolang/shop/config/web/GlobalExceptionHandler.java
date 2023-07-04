@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
         R<Void> r = R.failed();
         r.setPropFromBusinessException(e);
         log.error("请求出错:{}", r.getMsg());
-        return ResponseEntity.status(HttpStatus.OK).body(r);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(r);
     }
 
     /**
