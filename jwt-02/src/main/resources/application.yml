@@ -1,0 +1,33 @@
+server:
+  port: 8091
+  servlet:
+    context-path: /
+
+spring:
+  MVC:
+    #出现错误时, 直接抛出异常
+    throw-exception-if-no-handler-found: true
+  resources:
+    #不要为我们工程中的资源文件建立映射
+    add-mappings: false
+  application:
+    name: jx-boot
+
+# token配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: secret
+  # 令牌有效期（默认30分钟）
+  expireTime: 30
+
+logging:
+  level:
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    com.laolang.ssa.mall.khlmall: info
+  config: classpath:logback-spring.xml
+  file:
+    path: ../logs/jwt-01
+
+
