@@ -4,7 +4,8 @@ import com.laolang.shop.common.consts.IBizCode;
 
 public enum AuthBizCode implements IBizCode {
     login_expired("auth_0001", "token 已过期"),
-    error_token("auth_0002", "非法的 token");
+    error_token("auth_0002", "非法的 token"),
+    token_not_exist("auth_0002", "非法的 token");
 
     /**
      * 业务状态码

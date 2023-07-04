@@ -11,7 +11,9 @@ Content-Type: application/json
 
 @authToken = {{login.response.body.body.token}}
 
-
+###
+GET {{baseurl}}/auth/logout HTTP/1.1
+Authorization: {{authToken}}
 
 ### 
 GET {{baseurl}}/admin/sysdict/info HTTP/1.1

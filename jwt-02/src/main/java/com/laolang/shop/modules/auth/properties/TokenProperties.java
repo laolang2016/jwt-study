@@ -10,5 +10,5 @@ import org.springframework.stereotype.Component;
 public class TokenProperties {
     private String header = "Authorization";
     private String secret = "secret";
-    private long expireTime = 30;
+    private Integer expireTime = 30;
 }

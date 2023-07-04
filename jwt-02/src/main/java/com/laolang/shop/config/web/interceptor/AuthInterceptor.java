@@ -3,15 +3,14 @@ package com.laolang.shop.config.web.interceptor;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.laolang.shop.common.annotation.AnonymousAccess;
-import com.laolang.shop.common.consts.GlobalConst;
 import com.laolang.shop.common.domain.R;
 import com.laolang.shop.common.util.ServletKit;
 import com.laolang.shop.modules.auth.consts.logic.AuthBizCode;
 import com.laolang.shop.modules.auth.consts.logic.AuthConsts;
 import com.laolang.shop.modules.auth.domain.AuthUser;
 import com.laolang.shop.modules.auth.exception.AuthBusinessException;
-import com.laolang.shop.modules.auth.properties.TokenProperties;
 import com.laolang.shop.modules.auth.service.TokenService;
+import com.laolang.shop.modules.auth.util.AuthUtil;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,39 +31,41 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class AuthInterceptor implements HandlerInterceptor {
 
     private final TokenService tokenService;
-    private final TokenProperties tokenProperties;
+    private final AuthUtil authUtil;
 
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
                              @NonNull Object handler) throws Exception {
         try {
             // 有匿名访问注解, 直接跳过
-            if( isAnonymousAccess(handler)){
+            if (isAnonymousAccess(handler)) {
                 return true;
             }
 
             // 开始校验 token
-            String token = getToken(request);
+            String token = authUtil.getHeaderToken();
             if (StrUtil.isBlank(token)) {
                 log.warn("token 不存在");
                 ServletKit.writeJson(response, JSONUtil.toJsonStr(R.doOverdue()));
                 return false;
             }
             AuthUser authUser = tokenService.verify(token);
+
             // 填充 authUser 信息
             if (StrUtil.equals(authUser.getUsername(), "admin")) {
                 authUser.setId(1L);
             } else {
                 authUser.setId(2L);
             }
-            // TODO 一些其他操作, 比如刷新 token
 
             // 放入到 request 中, 供后续使用
             request.setAttribute(AuthConsts.AUTH_USER_ATTR_NAME, authUser);
         } catch (AuthBusinessException e) {
-            log.warn("token 解析异常");
             if (StrUtil.equals(AuthBizCode.login_expired.getCode(), e.getCode())) {
                 log.warn("token 过期");
+                ServletKit.writeJson(response, JSONUtil.toJsonStr(R.doOverdue()));
+            } else if (StrUtil.equals(AuthBizCode.token_not_exist.getCode(), e.getCode())) {
+                log.warn("token 不存在");
                 ServletKit.writeJson(response, JSONUtil.toJsonStr(R.doOverdue()));
             } else {
                 log.warn("非法的 token");
@@ -86,16 +87,5 @@ public class AuthInterceptor implements HandlerInterceptor {
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         AnonymousAccess anonymousAccess = handlerMethod.getMethod().getAnnotation(AnonymousAccess.class);
         return Objects.nonNull(anonymousAccess);
-    }
-
-    /**
-     * 获取请求头中的 token
-     */
-    private String getToken(HttpServletRequest request) {
-        String token = request.getHeader(tokenProperties.getHeader());
-        if (StrUtil.isNotEmpty(token) && token.startsWith(GlobalConst.TOKEN_PREFIX)) {
-            token = token.replace(GlobalConst.TOKEN_PREFIX, "");
-        }
-        return token;
     }
 }

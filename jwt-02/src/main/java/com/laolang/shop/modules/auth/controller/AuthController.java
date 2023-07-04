@@ -6,6 +6,7 @@ import com.laolang.shop.modules.auth.logic.AuthLogic;
 import com.laolang.shop.modules.auth.rsp.LoginRsp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,5 +25,14 @@ public class AuthController {
     @PostMapping("login")
     public R<LoginRsp> login(@RequestBody LoginUser loginUser) {
         return R.ok(authLogic.login(loginUser));
+    }
+
+    /**
+     * 退出接口
+     */
+    @GetMapping("logout")
+    public R<Void> logout() {
+        authLogic.logout();
+        return R.ok();
     }
 }

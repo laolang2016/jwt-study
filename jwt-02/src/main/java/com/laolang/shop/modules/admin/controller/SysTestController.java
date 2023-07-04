@@ -23,13 +23,12 @@ public class SysTestController {
     @GetMapping("testAnonymousAccess")
     public R<Map<String, Object>> testAnonymousAccess() {
         log.info("admin sysdict info");
-//        Map<String, Object> body = Maps.newHashMap();
-//
-//        body.put("msg", "这是一个匿名访问接口");
-//
-//        redisUtil.set("msg", body);
+        Map<String, Object> body = Maps.newHashMap();
 
-        Map<String, Object> body = (Map<String, Object>) redisUtil.get("msg");
+        body.put("msg", "这是一个匿名访问接口");
+
+        redisUtil.set("msg", body);
+
 
         return R.ok(body);
     }

@@ -1,16 +1,23 @@
 package com.laolang.shop.modules.auth.logic;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Sets;
+import com.laolang.shop.common.consts.StatusCodeConst;
+import com.laolang.shop.common.domain.R;
 import com.laolang.shop.common.exception.BusinessException;
+import com.laolang.shop.common.util.ServletKit;
 import com.laolang.shop.modules.auth.domain.AuthUser;
 import com.laolang.shop.modules.auth.domain.LoginUser;
 import com.laolang.shop.modules.auth.rsp.LoginRsp;
 import com.laolang.shop.modules.auth.service.TokenService;
+import com.laolang.shop.modules.auth.util.AuthUtil;
 import java.util.Set;
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -19,6 +26,8 @@ import org.springframework.stereotype.Service;
 public class AuthLogic {
 
     private final TokenService tokenService;
+    private final HttpServletResponse response;
+    private final AuthUtil authUtil;
 
     private Set<String> usernames;
 
@@ -49,5 +58,20 @@ public class AuthLogic {
         LoginRsp rsp = new LoginRsp();
         rsp.setToken(token);
         return rsp;
+    }
+
+    public void logout() {
+        try {
+            String token = authUtil.getHeaderToken();
+            if (StrUtil.isBlank(token)) {
+                log.warn("token 不存在");
+                ServletKit.writeJson(response, JSONUtil.toJsonStr(R.doOverdue()));
+                return;
+            }
+            tokenService.removeToken(token);
+        } catch (Exception e) {
+            log.error("退出接口异常:{}", ExceptionUtils.getMessage(e));
+            throw new BusinessException(StatusCodeConst.ERROR);
+        }
     }
 }
